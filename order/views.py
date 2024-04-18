@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 from django.contrib.auth.models import User
 from seller.models import Food
 from .models import Cart
@@ -23,8 +24,10 @@ def modify_cart(request):
     if cart.amount>0:
         cart.save()
     # 변경된 최종 결과를 반환(JSON)
+    totalQuantity = user.cart_set.aggregate(totalcount=Sum('amount'))['totalcount']
     context = {
         'newQuantity':cart.amount, 
+        'totalQuantity' : totalQuantity,
         'message':'수량이 성공적으로 업데이트 되었습니다.',
         'success':True
     }

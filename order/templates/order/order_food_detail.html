@@ -5,7 +5,7 @@
         <div>
             <a href="{% url 'order:order_cart' %}">
             <button type="button" class="btn btn-primary">
-                장바구니 <span class="badge bg-secondary"><span id="currentQuantity"></span></span>
+                장바구니 <span class="badge bg-secondary"><span id="totalQuantity"></span></span>
             </button>
             </a>
         </div>
@@ -21,6 +21,9 @@
             <input type="hidden" id="csrfToken" value="{{csrf_token}}">
         <button type="button" onclick="modifyCartAmount({{object.user.id}}, {{object.id}}, 1)" class="btn btn-danger">담기</button>
         <button type="button" onclick="modifyCartAmount({{object.user.id}}, {{object.id}}, -1)" class="btn btn-success">빼기</button>
+        <button type="button" class="btn btn-primary">
+            선택수량 <span class="badge bg-secondary"><span id="currentQuantity"></span></span>
+        </button>
         </div>
     </div>
 </div>
@@ -41,6 +44,7 @@ function modifyCartAmount(user_id, food_id, change){
             if (this.status === 200) {
                 var response = JSON.parse(this.responseText);
                 document.getElementById('currentQuantity').textContent = response.newQuantity;
+                document.getElementById('totalQuantity').textContent = response.totalQuantity;
                 console.log('Update successful:', response.message);
             } else {
                 console.error('Error updating:', this.statusText);
